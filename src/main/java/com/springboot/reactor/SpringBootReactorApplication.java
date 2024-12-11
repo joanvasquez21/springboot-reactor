@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.springboot.reactor.entity.User;
 
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @SpringBootApplication
 public class SpringBootReactorApplication implements CommandLineRunner {
@@ -30,10 +31,30 @@ public class SpringBootReactorApplication implements CommandLineRunner {
 
 	}
 
+	public void exampleToString() throws Exception {
+		List<User> usersList = new ArrayList<>();
+		usersList.add(new User("Joan", "Fulano"));
+		usersList.add(new User("Ana", "Six"));
+		usersList.add(new User("Luis", "Five"));
+		usersList.add(new User("Manuel", "Nine"));
+
+		 /*Flux.just("Ana Sofia", "Andres Guzman", "Joan Juan", "Joan Liam" ); */
+		Flux.fromIterable(usersList)
+				.map( user -> user.getName().toUpperCase().concat(user.getLastname().toUpperCase()))
+				.flatMap( name -> {
+					if(name.contains("joan".toUpperCase())) {
+						return Mono.just(name);
+					}else {
+						return Mono.empty();
+					}
+				})
+				.map(name -> {
+					return name.toLowerCase();
+				}).subscribe( u -> log.info( u.toString()));
+	}
 	
 
 	public void exampleFlatMap() throws Exception {
-		
 		List<String> usersList = new ArrayList<>();
 		usersList.add("Joan Fulano");
 		usersList.add("Ana Six");
@@ -43,7 +64,13 @@ public class SpringBootReactorApplication implements CommandLineRunner {
 		 /*Flux.just("Ana Sofia", "Andres Guzman", "Joan Juan", "Joan Liam" ); */
 		Flux.fromIterable(usersList)
 				.map(name -> new User(name.split(" ")[0].toUpperCase(),name.split(" ")[1].toUpperCase()))
-				.filter(user -> user.getName().toLowerCase().equals("joan"))
+				.flatMap( user -> {
+					if(user.getName().equalsIgnoreCase("joan")) {
+						return Mono.just(user);
+					}else {
+						return Mono.empty();
+					}
+				})
 				.map(user -> {
 					String name = user.getName().toLowerCase();
 					user.setName(name);
