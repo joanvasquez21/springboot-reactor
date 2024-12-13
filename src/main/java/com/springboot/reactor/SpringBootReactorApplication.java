@@ -27,9 +27,36 @@ public class SpringBootReactorApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		
 		//exampleIterator();
-		exampleFlatMap();
+		//exampleFlatMap();
+		//exampleToString();
+		exampleToCollectList();
 
 	}
+	
+	
+
+	public void exampleToCollectList() throws Exception {
+		List<User> usersList = new ArrayList<>();
+		usersList.add(new User("Joan", "Fulano"));
+		usersList.add(new User("Ana", "Six"));
+		usersList.add(new User("Luis", "Five"));
+		usersList.add(new User("Manuel", "Nine"));
+
+		 /*Flux.just("Ana Sofia", "Andres Guzman", "Joan Juan", "Joan Liam" ); */
+		Flux.fromIterable(usersList)
+				.map(user -> user.getName().toUpperCase().concat(" ").concat(user.getLastname().toUpperCase()))
+				.flatMap( name -> {
+					if(name.contains("joan".toUpperCase())) {
+						return Mono.just(name);
+					}else {
+						return Mono.empty();
+					}
+				})
+				.map(name -> {
+					return name.toLowerCase();
+				}).subscribe( u -> log.info( u.toString()));
+	}
+	
 
 	public void exampleToString() throws Exception {
 		List<User> usersList = new ArrayList<>();
@@ -40,7 +67,7 @@ public class SpringBootReactorApplication implements CommandLineRunner {
 
 		 /*Flux.just("Ana Sofia", "Andres Guzman", "Joan Juan", "Joan Liam" ); */
 		Flux.fromIterable(usersList)
-				.map( user -> user.getName().toUpperCase().concat(user.getLastname().toUpperCase()))
+				.map(user -> user.getName().toUpperCase().concat(" ").concat(user.getLastname().toUpperCase()))
 				.flatMap( name -> {
 					if(name.contains("joan".toUpperCase())) {
 						return Mono.just(name);
