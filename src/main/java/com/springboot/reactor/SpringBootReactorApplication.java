@@ -9,7 +9,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.springboot.reactor.entity.Comments;
 import com.springboot.reactor.entity.User;
+import com.springboot.reactor.entity.UserWithComments;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -34,6 +36,21 @@ public class SpringBootReactorApplication implements CommandLineRunner {
 	}
 	
 	
+	public void exampleUserCommentsFlatMap() {
+		//First it is created mono type observable
+		//First of user
+		Mono<User> userMono = Mono.fromCallable( ()-> new User("John", "Doe"));
+		
+		
+		
+		Mono<Comments> commentsMono = Mono.fromCallable( ()-> {		
+			Comments comments = new Comments();
+			comments.addComment("Hi John doe");
+			return comments;
+		});
+		
+		userMono.flatMap(u -> commentsMono.map(c -> new UserWithComments(u, c)));
+	}
 
 	public void exampleToCollectList() throws Exception {
 		List<User> usersList = new ArrayList<>();
