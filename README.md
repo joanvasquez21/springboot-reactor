@@ -1,9 +1,9 @@
-##Spring Boot Reactor Example
+## Spring Boot Reactor Example
 
 This project demonstrates the use of Spring Boot along with Project Reactor to handle reactive programming. The application implements various examples of reactive streams with Flux and Mono
-###Usage
+### Usage
 
-#####Main Class
+##### Main Class
 
 The main entry point is SpringBootReactorApplication.java, which executes predefined examples of Flux and Mono streams.
 
@@ -17,7 +17,7 @@ You can enable or disable examples by commenting/uncommenting the respective lin
     exampleToCollectList();
     }
 
-#####Running Examples
+##### Running Examples
 
 Each example demonstrates a specific reactive programming concept such as:
 
