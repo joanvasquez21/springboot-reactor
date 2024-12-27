@@ -35,6 +35,20 @@ public class SpringBootReactorApplication implements CommandLineRunner {
 
 	}
 	
+
+	public void exampleUserCommentsZipWith() {
+		Mono<User> userMono = Mono.fromCallable( ()-> new User("John", "Doe"));
+		
+		Mono<Comments> commentsUserMono = Mono.fromCallable( ()-> {		
+			Comments comments = new Comments();
+			comments.addComment("Hi John doe");
+			return comments;
+		});
+		
+		userMono.zipWith(commentsUserMono, (user, commentsUser) -> new UserWithComments(user, commentsUser))
+		.subscribe(uc -> log.info(uc.toString()));
+	}
+
 	
 	public void exampleUserCommentsFlatMap() {
 		//First it is created mono type observable
