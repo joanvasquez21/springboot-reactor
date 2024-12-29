@@ -31,7 +31,8 @@ public class SpringBootReactorApplication implements CommandLineRunner {
 		//exampleIterator();
 		//exampleFlatMap();
 		//exampleToString();
-		exampleToCollectList();
+		//exampleToCollectList();
+		exampleUserCommentsZipWith();
 
 	}
 	
@@ -54,8 +55,6 @@ public class SpringBootReactorApplication implements CommandLineRunner {
 		//First it is created mono type observable
 		//First of user
 		Mono<User> userMono = Mono.fromCallable( ()-> new User("John", "Doe"));
-		
-		
 		
 		Mono<Comments> commentsMono = Mono.fromCallable( ()-> {		
 			Comments comments = new Comments();
